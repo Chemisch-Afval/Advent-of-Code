@@ -8,6 +8,9 @@ path = str(path) + data
 
 data = np.loadtxt(path, dtype=str)
 
+#data = np.array(['vJrwpWtwJgWrhcsFMMfFFhFp',
+#'jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL',
+#'PmmdzqPrVvPwwTWBwg'])
 
 def fill_missing(list_,fill):
     if len(list_) == list_[-1]:
@@ -71,23 +74,27 @@ print(sum_)
 compartments = np.asarray(compartments)
 
 #Part 2
-
 groups = []
 sub = []
+sum_2 = 0
 for i, d in enumerate(data):
     list1 = [ord(char) -96 for char in d]
     list1 = np.asarray(list1)
     list1[list1<0] += 58
     list1 = [*set(list1)]
     list1 = sorted(list1)
-    list1 = fill_missing(list1,-1)
+    list1 = fill_missing(list1,-(i+1)**i)
     sub.append(list1)
-    if i%3 == 0:
-        print(sub)
+    if len(sub)>= 3:
+        sub = np.asarray(sub)
+        common_1 = sub[0] - sub[1]
+        common_2 = sub[1] - sub[2]
+        common = common_1 - common_2
+        sum_2 += sub[0][common==0][0]
         
         sub = []
         
-    
+print(sum_2)
 
 
 
