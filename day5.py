@@ -8,12 +8,42 @@ data = '\day5.txt'
 path = Path.cwd()
 path = str(path) + data
 
+path_stack = str(Path.cwd()) + '\day5-stack.txt'
+
 data = np.loadtxt(path,dtype=str)
 #Only keep the numbers
 data = data[:,1::2]
 instructions = data.astype(int)
 
 
+
+
+def parse_stack(file_name):
+    stack = None
+    data = open(file_name, "r")
+    for d in data:
+        if stack is None:
+            stack = []
+            #Create rows for stack
+            for i in range(len(d[1::4])):
+                stack.append([])
+
+        for i in range(len(d[1::4])):
+            char = d[(4*i+1)]
+            if char != ' ':
+                try:
+                    #Try to turn charcter into an int if it fails it is a letter
+                    int(char)
+                    pass
+                except:
+                    stack[i].insert(0,char)
+    
+    data.close()
+    return(stack)
+
+stack = parse_stack(path_stack)
+print(stack)
+stack2 = parse_stack(path_stack)
 
 def move_stack(stack,amount, from_, to_):
     for i in range(amount):
@@ -30,25 +60,6 @@ def move_stack9001(stack, amount, from_, to_):
     stack[from_] = stack[from_][:-amount]
     return(stack)
 
-stack = [['W','M','L','F'],
-        ['B', 'Z', 'V', 'M', 'F'],
-        ['H','V','R', 'S','L','Q'],
-        ['F', 'S', 'V', 'Q', 'P', 'M', 'T', 'J'],
-        ['L', 'S', 'W'],
-        ['F', 'V', 'P', 'M', 'R', 'J', 'W'],
-        ['J', 'Q', 'C', 'P', 'N', 'R', 'F'],
-        ['V', 'H', 'P', 'S', 'Z', 'W', 'R', 'B'],
-        ['B', 'M', 'J', 'C', 'G', 'H', 'Z', 'W']]
-
-stack2 = [['W','M','L','F'],
-          ['B', 'Z', 'V', 'M', 'F'],
-          ['H','V','R', 'S','L','Q'],
-          ['F', 'S', 'V', 'Q', 'P', 'M', 'T', 'J'],
-          ['L', 'S', 'W'],
-          ['F', 'V', 'P', 'M', 'R', 'J', 'W'],
-          ['J', 'Q', 'C', 'P', 'N', 'R', 'F'],
-          ['V', 'H', 'P', 'S', 'Z', 'W', 'R', 'B'],
-          ['B', 'M', 'J', 'C', 'G', 'H', 'Z', 'W']]
 
 for instruction in instructions:
     amount = instruction[0]
@@ -57,7 +68,6 @@ for instruction in instructions:
     stack = move_stack(stack,amount, from_, to_)
     stack2 = move_stack9001(stack2, amount, from_, to_)
 
-print(stack)
 
 for stacks in stack:
     print(stacks[-1])
